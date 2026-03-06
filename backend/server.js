@@ -4,7 +4,7 @@ const cors = require('cors')
 
 const app = express()
 app.use(cors())
-app.use(express.static(__dirname))
+app.use(express.static(__dirname + '/../'))
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,

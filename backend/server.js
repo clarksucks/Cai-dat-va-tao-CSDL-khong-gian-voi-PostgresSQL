@@ -5,11 +5,12 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 
-// Phục vụ các file tĩnh (HTML, JS) từ thư mục gốc
+// Phục vụ các file tĩnh (index.html) từ thư mục dự án
 app.use(express.static(__dirname + '/../'));
 
+// Cấu hình kết nối Database
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: "postgresql://kcn_user:W6FKO1t6z7osz4KixYPorj9c0bJ6WHfU@dpg-d6l56eh4tr6s73chrvo0-a.oregon-postgres.render.com/kcn",
   ssl: { rejectUnauthorized: false }
 });
 
@@ -40,15 +41,14 @@ app.get('/all', async (req, res) => {
         SELECT 'instruction-generated' AS type, geom FROM "instruction-generated"
       ) AS all_data
     `);
-
     res.json(result.rows[0].json_build_object);
   } catch (err) {
-    console.error(err);
+    console.error("Lỗi truy vấn:", err.message);
     res.status(500).json({ error: err.message });
   }
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server đang chạy tại cổng ${PORT}`);
 });
